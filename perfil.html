@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#065A60" />
+  <title>Cuadre | Tu perfil</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --box-bg: #F7FBFD;
+      --main-bg: #E2EFF3;
+      --text-main: #1A2B30;
+      --header-bg: #065A60;
+      --accent-btn: #087E8B;
+      --accent-hover: #066974;
+      --accent-warm: #F57C00;
+      --border-line: #B8D4DC;
+      --positive: #0f766e;
+      --negative: #b91c1c;
+      --shadow-soft: 0 10px 26px rgba(6, 90, 96, 0.09);
+      --shadow-card: 0 6px 18px rgba(26, 43, 48, 0.07);
+      --ease-fintech: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--main-bg);
+      background-image: radial-gradient(circle at top right, rgba(8, 126, 139, 0.12), transparent 55%),
+                        radial-gradient(circle at bottom left, rgba(245, 124, 0, 0.06), transparent 45%);
+      min-height: 100dvh;
+      display: flex;
+      justify-content: center;
+      color: var(--text-main);
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 480px;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      padding-bottom: 36px;
+    }
+
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulseShimmer {
+      0% { opacity: 0.45; }
+      50% { opacity: 0.9; }
+      100% { opacity: 0.45; }
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .anim-entry { animation: fadeSlideUp 0.45s var(--ease-fintech) both; }
+
+    .skeleton {
+      background: linear-gradient(90deg, rgba(8, 126, 139, 0.12) 25%, rgba(8, 126, 139, 0.24) 50%, rgba(8, 126, 139, 0.12) 75%);
+      background-size: 200% 100%;
+      animation: pulseShimmer 1.35s infinite ease-in-out;
+      border-radius: 8px;
+      color: transparent !important;
+      user-select: none;
+    }
+
+    .spinner-sm {
+      width: 15px;
+      height: 15px;
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      display: inline-block;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+    }
+
+    .dark-header {
+      background: linear-gradient(155deg, var(--header-bg) 0%, #044348 100%);
+      color: #ffffff;
+      padding: calc(20px + env(safe-area-inset-top)) 20px 64px;
+      border-bottom-left-radius: 28px;
+      border-bottom-right-radius: 28px;
+      box-shadow: 0 12px 28px rgba(6, 90, 96, 0.18);
+    }
+
+    .header-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      gap: 8px;
+    }
+
+    .header-logo {
+      height: 32px;
+      width: auto;
+      object-fit: contain;
+      background-color: var(--box-bg);
+      padding: 4px 10px;
+      border-radius: 11px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+    }
+
+    .btn-back {
+      background-color: rgba(255, 255, 255, 0.14);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.26);
+      padding: 7px 12px;
+      border-radius: 11px;
+      font-size: 0.74rem;
+      font-weight: 600;
+      cursor: pointer;
+      backdrop-filter: blur(6px);
+      transition: transform 0.18s var(--ease-fintech), background-color 0.2s ease;
+    }
+
+    .btn-back:hover { transform: translateY(-1px); background-color: rgba(255, 255, 255, 0.22); }
+    .btn-back:active { transform: scale(0.96); }
+
+    .page-title { font-size: 1.38rem; font-weight: 700; letter-spacing: -0.3px; }
+    .page-sub { font-size: 0.78rem; opacity: 0.84; font-weight: 300; margin-top: 2px; }
+
+    .content-wrapper {
+      padding: 0 18px;
+      margin-top: -42px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      z-index: 10;
+    }
+
+    .card {
+      background-color: var(--box-bg);
+      border: 1px solid var(--border-line);
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: var(--shadow-soft);
+      transition: transform 0.22s var(--ease-fintech), box-shadow 0.22s var(--ease-fintech);
+    }
+
+    .card-title {
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--header-bg);
+      margin-bottom: 12px;
+    }
+
+    .form-group { margin-bottom: 12px; }
+    .form-label { display: block; font-size: 0.74rem; font-weight: 600; margin-bottom: 5px; opacity: 0.86; }
+
+    .form-input, .form-select {
+      width: 100%;
+      padding: 11px 13px;
+      background-color: #ffffff;
+      border: 1.5px solid var(--border-line);
+      border-radius: 12px;
+      font-size: 0.85rem;
+      color: var(--text-main);
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .form-input:focus, .form-select:focus {
+      border-color: var(--accent-btn);
+      box-shadow: 0 0 0 3px rgba(8, 126, 139, 0.14);
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 13px;
+      background-color: var(--accent-btn);
+      color: #ffffff;
+      border: none;
+      border-radius: 13px;
+      font-size: 0.86rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(8, 126, 139, 0.24);
+      transition: background-color 0.2s ease, transform 0.18s var(--ease-fintech);
+    }
+
+    .btn-primary:hover { background-color: var(--accent-hover); transform: translateY(-1px); }
+    .btn-primary:active { transform: scale(0.97); }
+
+    .btn-warm {
+      background-color: var(--accent-warm);
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.18s var(--ease-fintech), filter 0.2s ease;
+    }
+
+    .btn-warm:hover { filter: brightness(0.95); transform: translateY(-1px); }
+
+    .status-msg {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-align: center;
+      display: none;
+    }
+
+    .status-msg.show { display: block; animation: fadeSlideUp 0.3s var(--ease-fintech); }
+    .status-ok { background-color: #EAF5F6; color: #0D4A50; border: 1px solid #B8DCE0; }
+    .status-warn { background-color: #F7F2EA; color: #5C4624; border: 1px solid #E3D5BE; }
+
+    .app-footer {
+      margin-top: auto;
+      padding-top: 28px;
+      text-align: center;
+      font-size: 0.72rem;
+      font-weight: 500;
+      opacity: 0.68;
+    }
+
+    .hidden { display: none !important; }
+    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
+    .stat-pill {
+      background: rgba(255, 255, 255, 0.14); border: 1px solid rgba(255, 255, 255, 0.24);
+      border-radius: 14px; padding: 8px 10px; text-align: center;
+    }
+    .stat-pill strong { display: block; font-size: 1rem; font-weight: 700; }
+    .stat-pill span { font-size: 0.68rem; opacity: 0.85; }
+    .help-text { font-size: 0.74rem; opacity: 0.78; margin-bottom: 10px; line-height: 1.4; }
+  </style>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, updatePassword, updateEmail, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-auth.js";
+    import { getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, query, where } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAR6Iy5kKzwjjRv912OgfGJ2anF3S0Ujp0",
+      authDomain: "cuadre-33bb7.firebaseapp.com",
+      projectId: "cuadre-33bb7",
+      storageBucket: "cuadre-33bb7.firebasestorage.app",
+      messagingSenderId: "216692071880",
+      appId: "1:216692071880:web:011ad59c9311d57eff74fd",
+      measurementId: "G-YECRX7JYVT"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const ADMIN_EMAIL = "admin@admin.com";
+    const SECURITY_QUESTIONS = [
+      "¿Cuál es el nombre de tu primera mascota?",
+      "¿En qué ciudad naciste?",
+      "¿Cuál fue tu primer carro o moto?",
+      "¿Cuál es el segundo nombre de tu mamá?",
+      "¿Cuál es tu comida venezolana favorita?"
+    ];
+    let currentUser = null;
+
+    function showMsg(id, text, isOk = true) {
+      const el = document.getElementById(id);
+      el.textContent = text;
+      el.className = `status-msg show ${isOk ? 'status-ok' : 'status-warn'}`;
+    }
+
+    window.saveIdentity = async function(e) {
+      e.preventDefault();
+      if (!currentUser) return;
+      const btn = document.getElementById('btn-save-id');
+      btn.innerHTML = `<span class="spinner-sm"></span>`;
+      const username = document.getElementById('prof-username').value.trim();
+      const preferredCurrency = document.getElementById('prof-currency').value;
+      try {
+        await setDoc(doc(db, "perfiles_usuarios", currentUser.uid), {
+          uid: currentUser.uid, email: currentUser.email, username, preferredCurrency
+        }, { merge: true });
+        document.getElementById('header-user-name').textContent = username || currentUser.email;
+        btn.textContent = 'Guardar cambios';
+        showMsg('msg-identity', '¡Listo! Cambios guardados.', true);
+      } catch (err) {
+        btn.textContent = 'Guardar cambios';
+        showMsg('msg-identity', 'No se pudieron guardar los cambios.', false);
+      }
+    };
+
+    window.saveSecurityQuestion = async function(e) {
+      e.preventDefault();
+      if (!currentUser) return;
+      const q = document.getElementById('prof-sec-q').value;
+      const a = document.getElementById('prof-sec-a').value.trim().toLowerCase();
+      if (!a) return;
+      const btn = document.getElementById('btn-save-sec');
+      btn.innerHTML = `<span class="spinner-sm"></span>`;
+      try {
+        await setDoc(doc(db, "perfiles_usuarios", currentUser.uid), { securityQuestion: q, securityAnswer: a }, { merge: true });
+        await setDoc(doc(db, "seguridad_recuperacion", currentUser.email.toLowerCase()), {
+          uid: currentUser.uid, email: currentUser.email.toLowerCase(), securityQuestion: q, securityAnswer: a
+        }, { merge: true });
+        btn.textContent = 'Guardar pregunta';
+        showMsg('msg-sec', 'Pregunta de seguridad actualizada.', true);
+      } catch (err) {
+        btn.textContent = 'Guardar pregunta';
+        showMsg('msg-sec', 'Error guardando pregunta.', false);
+      }
+    };
+
+    window.changeUserEmail = async function(e) {
+      e.preventDefault();
+      if (!currentUser) return;
+      const newEmail = document.getElementById('prof-new-email').value.trim().toLowerCase();
+      const pass = document.getElementById('prof-email-pass').value;
+      const btn = document.getElementById('btn-save-email');
+      btn.innerHTML = `<span class="spinner-sm"></span>`;
+      try {
+        const cred = EmailAuthProvider.credential(currentUser.email, pass);
+        await reauthenticateWithCredential(currentUser, cred);
+        await updateEmail(currentUser, newEmail);
+        await setDoc(doc(db, "perfiles_usuarios", currentUser.uid), { email: newEmail }, { merge: true });
+        btn.textContent = 'Cambiar tu correo';
+        showMsg('msg-email', 'Correo actualizado correctamente.', true);
+      } catch (err) {
+        btn.textContent = 'Cambiar tu correo';
+        showMsg('msg-email', 'No se pudo cambiar el correo. Verifica tu clave actual.', false);
+      }
+    };
+
+    window.changeUserPassword = async function(e) {
+      e.preventDefault();
+      if (!currentUser) return;
+      const curPass = document.getElementById('prof-cur-pass').value;
+      const newPass = document.getElementById('prof-new-pass').value;
+      if (newPass.length < 6) {
+        showMsg('msg-pass', 'La contraseña debe tener al menos 6 caracteres.', false);
+        return;
+      }
+      const btn = document.getElementById('btn-save-pass');
+      btn.innerHTML = `<span class="spinner-sm"></span>`;
+      try {
+        const cred = EmailAuthProvider.credential(currentUser.email, curPass);
+        await reauthenticateWithCredential(currentUser, cred);
+        await updatePassword(currentUser, newPass);
+        btn.textContent = 'Cambiar tu clave';
+        showMsg('msg-pass', '¡Listo! Clave actualizada.', true);
+      } catch (err) {
+        btn.textContent = 'Cambiar tu clave';
+        showMsg('msg-pass', 'La clave actual no coincide.', false);
+      }
+    };
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) { window.location.href = 'cuadre.html'; return; }
+      currentUser = user;
+      const sel = document.getElementById('prof-sec-q');
+      sel.innerHTML = SECURITY_QUESTIONS.map(q => `<option value="${q}">${q}</option>`).join('');
+      document.getElementById('header-user-email').textContent = user.email;
+      const profSnap = await getDoc(doc(db, "perfiles_usuarios", user.uid));
+      if (profSnap.exists()) {
+        const d = profSnap.data();
+        document.getElementById('prof-username').value = d.username || '';
+        document.getElementById('header-user-name').textContent = d.username || user.email;
+        if (d.preferredCurrency) document.getElementById('prof-currency').value = d.preferredCurrency;
+        if (d.securityQuestion) sel.value = d.securityQuestion;
+      } else {
+        document.getElementById('header-user-name').textContent = user.email.split('@')[0];
+      }
+      const [accSnap, movSnap, fixSnap] = await Promise.all([
+        getDocs(query(collection(db, "cuentas"), where("uid", "==", user.uid))),
+        getDocs(query(collection(db, "movimientos"), where("uid", "==", user.uid))),
+        getDocs(query(collection(db, "fijos"), where("uid", "==", user.uid)))
+      ]);
+      document.getElementById('cnt-acc').textContent = accSnap.size;
+      document.getElementById('cnt-mov').textContent = movSnap.size;
+      document.getElementById('cnt-fix').textContent = fixSnap.size;
+    });
+  </script>
+</head>
+<body>
+  <main class="app-shell">
+    <header class="dark-header anim-entry">
+      <div class="header-top-row">
+        <img src="logo cuadre.png" alt="cuadre" class="header-logo" />
+        <button type="button" class="btn-back" onclick="window.location.href='dashboard.html'">← Volver</button>
+      </div>
+      <h1 class="page-title">Tu perfil</h1>
+      <p class="page-sub" id="header-user-name">Cargando...</p>
+      <p class="page-sub" id="header-user-email" style="font-size:0.72rem; opacity:0.72;"></p>
+      <div class="stats-row">
+        <div class="stat-pill"><strong id="cnt-acc">0</strong><span>Cuentas</span></div>
+        <div class="stat-pill"><strong id="cnt-mov">0</strong><span>Movimientos</span></div>
+        <div class="stat-pill"><strong id="cnt-fix">0</strong><span>Fijos</span></div>
+      </div>
+    </header>
+
+    <div class="content-wrapper anim-entry">
+      <section class="card">
+        <div class="card-title">Tu nombre y cómo te gusta ver en la app</div>
+        <form onsubmit="saveIdentity(event)">
+          <div class="form-group">
+            <label class="form-label">Tu apodo o nombre de usuario</label>
+            <input type="text" id="prof-username" class="form-input" placeholder="Ej. Carlos" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Moneda que usas de preferencia</label>
+            <select id="prof-currency" class="form-select">
+              <option value="USD">Dólares ($ USD)</option>
+              <option value="VES">Bolívares (Bs.)</option>
+              <option value="CRYPTO">Cripto / Tokens</option>
+            </select>
+          </div>
+          <button type="submit" id="btn-save-id" class="btn-primary">Guardar cambios</button>
+          <div id="msg-identity" class="status-msg"></div>
+        </form>
+      </section>
+
+      <section class="card">
+        <div class="card-title">Pregunta de seguridad</div>
+        <p class="help-text">Te sirve pa' confirmar que eres tú si cambias o recuperas tu clave al entrar.</p>
+        <form onsubmit="saveSecurityQuestion(event)">
+          <div class="form-group">
+            <select id="prof-sec-q" class="form-select"></select>
+          </div>
+          <div class="form-group">
+            <input type="text" id="prof-sec-a" class="form-input" placeholder="Nueva respuesta secreta" required />
+          </div>
+          <button type="submit" id="btn-save-sec" class="btn-primary">Guardar pregunta</button>
+          <div id="msg-sec" class="status-msg"></div>
+        </form>
+      </section>
+
+      <section class="card">
+        <div class="card-title">Cambiar tu correo</div>
+        <p class="help-text">Te mandamos un enlace al correo nuevo pa' que lo confirmes antes de cambiarlo.</p>
+        <form onsubmit="changeUserEmail(event)">
+          <div class="form-group">
+            <input type="email" id="prof-new-email" class="form-input" placeholder="Nuevo correo electrónico" required />
+          </div>
+          <div class="form-group">
+            <input type="password" id="prof-email-pass" class="form-input" placeholder="Tu clave actual para confirmar" required />
+          </div>
+          <button type="submit" id="btn-save-email" class="btn-primary">Cambiar tu correo</button>
+          <div id="msg-email" class="status-msg"></div>
+        </form>
+      </section>
+
+      <section class="card">
+        <div class="card-title">Cambiar tu clave</div>
+        <form onsubmit="changeUserPassword(event)">
+          <div class="form-group">
+            <input type="password" id="prof-cur-pass" class="form-input" placeholder="Clave actual" required />
+          </div>
+          <div class="form-group">
+            <input type="password" id="prof-new-pass" class="form-input" placeholder="Nueva clave (mín. 6 caracteres)" required />
+          </div>
+          <button type="submit" id="btn-save-pass" class="btn-primary">Cambiar tu clave</button>
+          <div id="msg-pass" class="status-msg"></div>
+        </form>
+      </section>
+    </div>
+
+    <div class="app-footer">cuadre app • finanzas personales</div>
+  </main>
+</body>
+</html>

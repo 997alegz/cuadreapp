@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#065A60" />
+  <title>Cuadre | Reportes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <style>
+    :root {
+      --box-bg: #F7FBFD;
+      --main-bg: #E2EFF3;
+      --text-main: #1A2B30;
+      --header-bg: #065A60;
+      --accent-btn: #087E8B;
+      --accent-hover: #066974;
+      --accent-warm: #F57C00;
+      --border-line: #B8D4DC;
+      --positive: #0f766e;
+      --negative: #b91c1c;
+      --shadow-soft: 0 10px 26px rgba(6, 90, 96, 0.09);
+      --shadow-card: 0 6px 18px rgba(26, 43, 48, 0.07);
+      --ease-fintech: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--main-bg);
+      background-image: radial-gradient(circle at top right, rgba(8, 126, 139, 0.12), transparent 55%),
+                        radial-gradient(circle at bottom left, rgba(245, 124, 0, 0.06), transparent 45%);
+      min-height: 100dvh;
+      display: flex;
+      justify-content: center;
+      color: var(--text-main);
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 480px;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      padding-bottom: 36px;
+    }
+
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulseShimmer {
+      0% { opacity: 0.45; }
+      50% { opacity: 0.9; }
+      100% { opacity: 0.45; }
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .anim-entry { animation: fadeSlideUp 0.45s var(--ease-fintech) both; }
+
+    .skeleton {
+      background: linear-gradient(90deg, rgba(8, 126, 139, 0.12) 25%, rgba(8, 126, 139, 0.24) 50%, rgba(8, 126, 139, 0.12) 75%);
+      background-size: 200% 100%;
+      animation: pulseShimmer 1.35s infinite ease-in-out;
+      border-radius: 8px;
+      color: transparent !important;
+      user-select: none;
+    }
+
+    .spinner-sm {
+      width: 15px;
+      height: 15px;
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      display: inline-block;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+    }
+
+    .dark-header {
+      background: linear-gradient(155deg, var(--header-bg) 0%, #044348 100%);
+      color: #ffffff;
+      padding: calc(20px + env(safe-area-inset-top)) 20px 64px;
+      border-bottom-left-radius: 28px;
+      border-bottom-right-radius: 28px;
+      box-shadow: 0 12px 28px rgba(6, 90, 96, 0.18);
+    }
+
+    .header-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      gap: 8px;
+    }
+
+    .header-logo {
+      height: 32px;
+      width: auto;
+      object-fit: contain;
+      background-color: var(--box-bg);
+      padding: 4px 10px;
+      border-radius: 11px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+    }
+
+    .btn-back {
+      background-color: rgba(255, 255, 255, 0.14);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.26);
+      padding: 7px 12px;
+      border-radius: 11px;
+      font-size: 0.74rem;
+      font-weight: 600;
+      cursor: pointer;
+      backdrop-filter: blur(6px);
+      transition: transform 0.18s var(--ease-fintech), background-color 0.2s ease;
+    }
+
+    .btn-back:hover { transform: translateY(-1px); background-color: rgba(255, 255, 255, 0.22); }
+    .btn-back:active { transform: scale(0.96); }
+
+    .page-title { font-size: 1.38rem; font-weight: 700; letter-spacing: -0.3px; }
+    .page-sub { font-size: 0.78rem; opacity: 0.84; font-weight: 300; margin-top: 2px; }
+
+    .content-wrapper {
+      padding: 0 18px;
+      margin-top: -42px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      z-index: 10;
+    }
+
+    .card {
+      background-color: var(--box-bg);
+      border: 1px solid var(--border-line);
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: var(--shadow-soft);
+      transition: transform 0.22s var(--ease-fintech), box-shadow 0.22s var(--ease-fintech);
+    }
+
+    .card-title {
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--header-bg);
+      margin-bottom: 12px;
+    }
+
+    .form-group { margin-bottom: 12px; }
+    .form-label { display: block; font-size: 0.74rem; font-weight: 600; margin-bottom: 5px; opacity: 0.86; }
+
+    .form-input, .form-select {
+      width: 100%;
+      padding: 11px 13px;
+      background-color: #ffffff;
+      border: 1.5px solid var(--border-line);
+      border-radius: 12px;
+      font-size: 0.85rem;
+      color: var(--text-main);
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .form-input:focus, .form-select:focus {
+      border-color: var(--accent-btn);
+      box-shadow: 0 0 0 3px rgba(8, 126, 139, 0.14);
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 13px;
+      background-color: var(--accent-btn);
+      color: #ffffff;
+      border: none;
+      border-radius: 13px;
+      font-size: 0.86rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(8, 126, 139, 0.24);
+      transition: background-color 0.2s ease, transform 0.18s var(--ease-fintech);
+    }
+
+    .btn-primary:hover { background-color: var(--accent-hover); transform: translateY(-1px); }
+    .btn-primary:active { transform: scale(0.97); }
+
+    .btn-warm {
+      background-color: var(--accent-warm);
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.18s var(--ease-fintech), filter 0.2s ease;
+    }
+
+    .btn-warm:hover { filter: brightness(0.95); transform: translateY(-1px); }
+
+    .status-msg {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-align: center;
+      display: none;
+    }
+
+    .status-msg.show { display: block; animation: fadeSlideUp 0.3s var(--ease-fintech); }
+    .status-ok { background-color: #EAF5F6; color: #0D4A50; border: 1px solid #B8DCE0; }
+    .status-warn { background-color: #F7F2EA; color: #5C4624; border: 1px solid #E3D5BE; }
+
+    .app-footer {
+      margin-top: auto;
+      padding-top: 28px;
+      text-align: center;
+      font-size: 0.72rem;
+      font-weight: 500;
+      opacity: 0.68;
+    }
+
+    .hidden { display: none !important; }
+    .rep-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; margin-top: 10px; }
+    .rep-table th { background: var(--header-bg); color: #ffffff; padding: 8px 6px; text-align: left; }
+    .rep-table td { padding: 8px 6px; border-bottom: 1px solid var(--border-line); }
+  </style>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, updatePassword, updateEmail, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-auth.js";
+    import { getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, query, where } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAR6Iy5kKzwjjRv912OgfGJ2anF3S0Ujp0",
+      authDomain: "cuadre-33bb7.firebaseapp.com",
+      projectId: "cuadre-33bb7",
+      storageBucket: "cuadre-33bb7.firebasestorage.app",
+      messagingSenderId: "216692071880",
+      appId: "1:216692071880:web:011ad59c9311d57eff74fd",
+      measurementId: "G-YECRX7JYVT"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const ADMIN_EMAIL = "admin@admin.com";
+    let allMovements = [];
+    let filteredMovements = [];
+
+    window.applyFilter = function() {
+      const mon = document.getElementById('rep-moneda').value;
+      const tip = document.getElementById('rep-tipo').value;
+      filteredMovements = allMovements.filter(m =>
+        (mon === 'ALL' || m.moneda === mon) &&
+        (tip === 'ALL' || m.tipo === tip)
+      );
+      const tbody = document.getElementById('rep-body');
+      tbody.innerHTML = filteredMovements.length === 0
+        ? `<tr><td colspan="4" style="text-align:center; padding:14px;">Sin movimientos con ese filtro.</td></tr>`
+        : filteredMovements.map(m => `
+            <tr>
+              <td>${m.fecha || ''}</td>
+              <td>${m.descripcion || m.categoria}</td>
+              <td>${m.moneda}</td>
+              <td style="font-weight:700;">${m.tipo === 'ingreso' ? '+' : '-'}${Number(m.monto || 0).toFixed(2)}</td>
+            </tr>
+          `).join('');
+    };
+
+    window.downloadExcelReport = function() {
+      const rows = filteredMovements.map(m => ({
+        Fecha: m.fecha || '', Tipo: m.tipo || '', Moneda: m.moneda || '',
+        Cuenta: m.cuentaNombre || '', Categoria: m.categoria || '',
+        Detalle: m.descripcion || '', Monto: Number(m.monto || 0)
+      }));
+      const ws = XLSX.utils.json_to_sheet(rows);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Movimientos");
+      XLSX.writeFile(wb, "cuadre_reporte.xlsx");
+    };
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) { window.location.href = 'cuadre.html'; return; }
+      const snap = await getDocs(query(collection(db, "movimientos"), where("uid", "==", user.uid)));
+      allMovements = [];
+      snap.forEach(d => allMovements.push(d.data()));
+      allMovements.sort((a, b) => (b.fecha || '').localeCompare(a.fecha || ''));
+      applyFilter();
+    });
+  </script>
+</head>
+<body>
+  <main class="app-shell">
+    <header class="dark-header anim-entry">
+      <div class="header-top-row">
+        <img src="logo cuadre.png" alt="cuadre" class="header-logo" />
+        <button type="button" class="btn-back" onclick="window.location.href='dashboard.html'">← Volver</button>
+      </div>
+      <h1 class="page-title">Reportes</h1>
+      <p class="page-sub">Exportación de movimientos • cuadre</p>
+    </header>
+
+    <div class="content-wrapper anim-entry">
+      <section class="card">
+        <div class="card-title">Filtrar y descargar</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px;">
+          <select id="rep-moneda" class="form-select" onchange="applyFilter()">
+            <option value="ALL">Todas las monedas</option>
+            <option value="USD">USD ($)</option>
+            <option value="VES">Bolívares (Bs.)</option>
+            <option value="CRYPTO">Cripto</option>
+          </select>
+          <select id="rep-tipo" class="form-select" onchange="applyFilter()">
+            <option value="ALL">Ingresos y Gastos</option>
+            <option value="ingreso">Solo Ingresos</option>
+            <option value="gasto">Solo Gastos</option>
+          </select>
+        </div>
+        <button type="button" class="btn-primary" onclick="downloadExcelReport()">Descargar reporte</button>
+
+        <table class="rep-table">
+          <thead>
+            <tr><th>Fecha</th><th>Detalle</th><th>Mon.</th><th>Monto</th></tr>
+          </thead>
+          <tbody id="rep-body"></tbody>
+        </table>
+      </section>
+    </div>
+
+    <div class="app-footer">cuadre app • finanzas personales</div>
+  </main>
+</body>
+</html>
